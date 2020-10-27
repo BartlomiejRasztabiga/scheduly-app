@@ -2,6 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 void main() => runApp(MyApp());
@@ -33,7 +35,28 @@ class _TodaysScheduleState extends State<TodaysSchedule> {
         title: Text('Scheduly'),
       ),
       body: _buildSchedule(),
+      floatingActionButton: new FloatingActionButton(
+          onPressed: addRandomTask,
+          tooltip: 'Add task',
+          child: new Icon(Icons.add)),
     );
+  }
+
+  void addRandomTask() {
+    var rng = new Random();
+    setState(() {
+      _entries.add(new ScheduleEntry(
+          rng.nextInt(99999),
+          generateRandomString(5),
+          generateRandomString(5),
+          generateRandomString(15)));
+    });
+  }
+
+  String generateRandomString(int len) {
+    var r = Random();
+    return String.fromCharCodes(
+        List.generate(len, (index) => r.nextInt(33) + 89));
   }
 
   Widget _buildSchedule() {
