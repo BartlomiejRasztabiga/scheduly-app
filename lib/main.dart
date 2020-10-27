@@ -20,9 +20,9 @@ class TodaysSchedule extends StatefulWidget {
 
 class _TodaysScheduleState extends State<TodaysSchedule> {
   final _entries = <ScheduleEntry>[
-    new ScheduleEntry(1, "9:00", "10:00", "test"),
-    new ScheduleEntry(2, "10:00", "11:00", "test"),
-    new ScheduleEntry(3, "11:00", "12:00", "test1")
+    new ScheduleEntry(1, "9:00", "10:00", "do some programming"),
+    new ScheduleEntry(2, "10:00", "11:00", "learn ANMA"),
+    new ScheduleEntry(3, "11:00", "12:00", "chew gum")
   ];
   final _biggerFont = TextStyle(fontSize: 18.0);
 
@@ -40,9 +40,10 @@ class _TodaysScheduleState extends State<TodaysSchedule> {
     return ReorderableListView(
         children: _entries.map((item) => _buildRow(item)).toList(),
         onReorder: (int oldIndex, int newIndex) {
+          // don't move checked items, why? no idea
+          if (_entries[oldIndex].isChecked) return;
           setState(
             () {
-              print("$oldIndex, $newIndex");
               if (newIndex > oldIndex) {
                 newIndex -= 1;
               }
@@ -55,13 +56,26 @@ class _TodaysScheduleState extends State<TodaysSchedule> {
 
   Widget _buildRow(ScheduleEntry entry) {
     return ListTile(
-        key: Key(entry.index.toString()),
-        title: Text(
+      key: Key(entry.index.toString()),
+      title: new Row(children: <Widget>[
+        new Checkbox(
+          value: entry.isChecked,
+          onChanged: (bool value) {
+            setState(() {
+              entry.isChecked = value;
+              // TODO introduce state management
+            });
+          },
+        ),
+        Text(
           entry.getHourHeader(),
           style: _biggerFont,
         ),
-        subtitle: Text(entry.getTaskTitle()),
-        trailing: Icon(Icons.menu));
+      ]),
+      subtitle: Text(entry.getTaskTitle()),
+      trailing: Icon(Icons.menu),
+      enabled: !entry.isChecked,
+    );
   }
 }
 
@@ -70,6 +84,7 @@ class ScheduleEntry {
   String startingHour;
   String endingHour;
   String title;
+  bool isChecked = false;
 
   ScheduleEntry(
       int index, String startingHour, String endingHour, String title) {
