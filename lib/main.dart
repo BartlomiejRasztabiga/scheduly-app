@@ -38,7 +38,7 @@ class _TodaysScheduleState extends State<TodaysSchedule> {
 
   Widget _buildSuggestions() {
     return ListView.separated(
-        padding: EdgeInsets.all(16.0),
+        padding: EdgeInsets.all(4.0),
         itemCount: _entries.length,
         itemBuilder: (context, i) {
           return _buildRow(_entries[i]);
@@ -50,11 +50,11 @@ class _TodaysScheduleState extends State<TodaysSchedule> {
 
   Widget _buildRow(ScheduleEntry pair) {
     return ListTile(
-      title: Text(
-        pair.toText(),
-        style: _biggerFont,
-      ),
-    );
+        title: Text(
+          pair.getHourHeader(),
+          style: _biggerFont,
+        ),
+        subtitle: Text(pair.getTaskTitle()));
   }
 }
 
@@ -69,7 +69,11 @@ class ScheduleEntry {
     this.title = title;
   }
 
-  String toText() {
-    return '${this.startingHour}-${this.endingHour}  ${this.title}';
+  String getHourHeader() {
+    return '${this.startingHour} - ${this.endingHour}';
+  }
+
+  String getTaskTitle() {
+    return this.title;
   }
 }
