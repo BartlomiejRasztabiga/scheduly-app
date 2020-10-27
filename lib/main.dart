@@ -22,7 +22,7 @@ class _TodaysScheduleState extends State<TodaysSchedule> {
   final _entries = <ScheduleEntry>[
     new ScheduleEntry(1, "9:00", "10:00", "test"),
     new ScheduleEntry(2, "10:00", "11:00", "test"),
-    new ScheduleEntry(3, "10:00", "11:00", "test1")
+    new ScheduleEntry(3, "11:00", "12:00", "test1")
   ];
   final _biggerFont = TextStyle(fontSize: 18.0);
 
@@ -39,28 +39,17 @@ class _TodaysScheduleState extends State<TodaysSchedule> {
   Widget _buildSchedule() {
     return ReorderableListView(
         children: _entries.map((item) => _buildRow(item)).toList(),
-        onReorder: (int start, int current) {
-          // dragging from top to bottom
-          if (start < current) {
-            int end = current - 1;
-            ScheduleEntry startItem = _entries[start];
-            int i = 0;
-            int local = start;
-            do {
-              _entries[local] = _entries[++local];
-              i++;
-            } while (i < end - start);
-            _entries[end] = startItem;
-          }
-          // dragging from bottom to top
-          else if (start > current) {
-            ScheduleEntry startItem = _entries[start];
-            for (int i = start; i > current; i--) {
-              _entries[i] = _entries[i - 1];
-            }
-            _entries[current] = startItem;
-          }
-          setState(() {});
+        onReorder: (int oldIndex, int newIndex) {
+          setState(
+            () {
+              print("$oldIndex, $newIndex");
+              if (newIndex > oldIndex) {
+                newIndex -= 1;
+              }
+              final ScheduleEntry item = _entries.removeAt(oldIndex);
+              _entries.insert(newIndex, item);
+            },
+          );
         });
   }
 
