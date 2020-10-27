@@ -32,11 +32,11 @@ class _TodaysScheduleState extends State<TodaysSchedule> {
       appBar: AppBar(
         title: Text('Scheduly'),
       ),
-      body: _buildSuggestions(),
+      body: _buildSchedule(),
     );
   }
 
-  Widget _buildSuggestions() {
+  Widget _buildSchedule() {
     return ListView.separated(
         padding: EdgeInsets.all(4.0),
         itemCount: _entries.length,
